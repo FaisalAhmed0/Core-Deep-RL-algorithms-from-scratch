@@ -1,2 +1,2 @@
-# Deep-RL-for-Cart-and-pole-
-This Repository contain Deep RL algorithms experimented on the Cart and Pole environment in open AI gym and uses Tensorflow for building neural networks 
+# Reinforcmenr Learning
+This Repository contains RL and Deep RL algorithms experimented in variuos toy problem in open AI gym environment, these alogrithms are implemented in python via numpy and Tensorflow.
