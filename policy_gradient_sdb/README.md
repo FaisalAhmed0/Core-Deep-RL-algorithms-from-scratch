@@ -5,10 +5,12 @@ https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html#baselines-in-p
 ## pararmeters:
     env: environnment name assuming it is a gym environment
     s: a reference path for saving relevent files such as the network state and tensorboard log files
-    lr : learning rate for both actor and the critic
-    eps: number of training epoches
-    batch: batch size for each epoch
+    lr_act : learning rate for policy network
+    lr_crt : learning rate for value network
+    epochs: number of training epochs
+    eps: number of episodes per epoch
     nn_hidden: number of units in the two hidden layers architecture for both the policy and value nets
+    seed: random number generation seed
 
 ## Performance and diagnosis:
     KL divergence of the policy
@@ -22,10 +24,10 @@ https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html#baselines-in-p
     Value net output
 
 ## Default parameters:
-    learning rate: 1e-3
+    learning rate (for both policy and value networks): 1e-3
     nn_hidden: [64,64]
-    batch : 10
-    eps: 3000
+    eps : 1
+    epochs: 3000
 ## To see the performance curves run tensorboard on the cmd/terminal:
     tensorboard --logdit=<log_files directory>
     open the output local host link in your favorite browser
