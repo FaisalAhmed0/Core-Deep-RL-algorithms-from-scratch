@@ -46,7 +46,7 @@ class SampleGeneration():
 
     @staticmethod
     @torch.no_grad()
-    def generate_samples(net, env, tb, eps, batch_size=40 ):
+    def generate_samples(net, env, batch_size=40 ):
         states_t = []
         actions_t = []
         rewards_t = []
@@ -81,12 +81,12 @@ class SampleGeneration():
                 dones.append(done)
                 if not done:
                     states.append(state)
-            tb.add_scalar('training return', total_reward, ((batch_size*eps) + trajectory))
             rewards_t.append(np.array(rewards))
             states_t.append(np.array(states))
             actions_t.append(np.array(actions))
             dones_t.append(np.array(dones))
-        return (np.array(states_t),np.array(rewards_t), np.array(actions_t), np.array(dones_t))
+            batch = (np.array(states_t),np.array(rewards_t), np.array(actions_t), np.array(dones_t))
+        return batch
 
 
 class ReturnEstimator():
