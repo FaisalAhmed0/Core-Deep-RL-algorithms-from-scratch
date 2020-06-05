@@ -134,6 +134,7 @@ if __name__=="__main__":
 
         print(policy_net)
         print(value_net)
+        # break
 
         print('----------------------------------------------------------------------------------------')
 
@@ -318,5 +319,9 @@ if __name__=="__main__":
             torch.save(policy_net.state_dict(), net_state_file_dir)
 
             print(progress)
+    print("Training is finished.")
+    print("To plot the result run plot_results.py with the same cmd arguemnts")
+
+
 
 

@@ -14,6 +14,7 @@ import itertools
 import pandas as pd
 from collections import OrderedDict
 import os
+import pybullet_envs
 '''
 pararmeters:
     env: environnment name assuming it is a gym environment

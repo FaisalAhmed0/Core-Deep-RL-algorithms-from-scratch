@@ -29,5 +29,4 @@ https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html#baselines-in-p
     eps : 1
     epochs: 3000
 ## To see the performance curves run tensorboard on the cmd/terminal:
-    tensorboard --logdit=<log_files directory>
-    open the output local host link in your favorite browser
+    To plot the result run plot_results.py with the same cmd/terminal arguemnts of the training
