@@ -1,0 +1,3 @@
+,Environment,Epochs,Max return,Mean Return,Min return,No.Hidden,Std return,Training episodes per epoch,policy learning rate,value learning rate
+0,CartPole-v0,5000.0,112.0,71.8736,112.0,"[256, 256]",47.24154676657967,1.0,0.0001,0.001
+1,CartPole-v0,5000.0,116.0,85.3222,42.0,"[256, 256]",48.143451561007225,5.0,0.0001,0.001
