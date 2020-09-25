@@ -4,7 +4,8 @@ import gym.spaces
 import numpy as np
 import collections
 
-
+# Most of this code is based on 
+# https://github.com/PacktPublishing/Deep-Reinforcement-Learning-Hands-On/tree/master/Chapter06
 class FireResetEnv(gym.Wrapper):
     def __init__(self, env=None):
         """For environments where the user need to press FIRE for the game to start."""
