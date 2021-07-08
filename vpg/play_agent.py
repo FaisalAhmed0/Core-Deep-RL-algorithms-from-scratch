@@ -7,11 +7,11 @@ import models
 import os
 import argparse
 import ast
-import pybullet_envs
+# import pybullet_envs
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--env", type=str, required=True)
-parser.add_argument("--render", type=str, required=False, default='True')
+parser.add_argument("--render", type=str, required=False, default='False')
 parser.add_argument("--record", type=str, required=False, default='False')
 parser.add_argument("--nn_hidden", type=str, required=False, default='[64,64]')
 args = parser.parse_args()
@@ -56,7 +56,7 @@ if __name__=="__main__":
     policy = models.PG_Actor(env.observation_space.shape, env.action_space, nn_hidden)
     print(f"environment name: {env_name} | no.hidden: {nn_hidden} | Solving reward: { env.spec.reward_threshold}| Episode length: {env.spec.max_episode_steps}")
     while True:
-        policy.load_state_dict(torch.load(net_state_file_dir + f'/{env_name}_{nn_hidden}_policy_state.pt'))
+        policy.load_state_dict(torch.load(net_state_file_dir + f'/VPG-{env_name}_{nn_hidden}_policy_state.pt'))
         total_return = test_policy(policy, env, render=render, record=record)
         print(f"Total return {total_return}")
         print("Press Enter to play again")

@@ -2,9 +2,19 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import gym
-
+'''
+This script contain classes for generic Deep RL algorithms,
+ranging from simple MLP policies to CNNs.
+PG_Actor(obs_shape, action_space, nn_hiddens)
+PG_Critic(obs_shape, nn_hiddens)
+'''
 
 class PG_Actor(nn.Module):
+    '''
+    This class defines a simple Actor MLP for an actor crititc algorithm or a simple
+    policy gradient algorithms, 
+    this class works with both discrte and continuous action spaces.
+    '''
     def __init__(self, obs_shape, action_space, nn_hiddens):
         super(PG_Actor, self).__init__()
         self.nn_hiddens = nn_hiddens

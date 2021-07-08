@@ -34,10 +34,10 @@ seeds = ast.literal_eval(args.seeds)
 eps_len_fig = plt.figure('Episode length')
 eps_len_axes = eps_len_fig.add_subplot(111)
 
-q_estimate_fig = plt.figure('Q estimate')
-q_estimate_axes = q_estimate_fig.add_subplot(111)
+adv_fig = plt.figure('Advantage')
+adv_axes = adv_fig.add_subplot(111)
 
-training_return_fig = plt.figure('Trainining return')
+training_return_fig = plt.figure('Epoch return')
 training_return_axes  = training_return_fig.add_subplot(111)
 
 mean_return_fig = plt.figure('Mean return')
@@ -67,11 +67,11 @@ entropy_axes  = entropy_fig.add_subplot(111)
 value_loss_fig = plt.figure('Value loss')
 value_loss_axes  = value_loss_fig.add_subplot(111)
 
-# policy_grad_norm_fig = plt.figure('Policy grad norm')
-# policy_grad_norm_axes  = policy_grad_norm_fig.add_subplot(111)
+policy_grad_norm_fig = plt.figure('Policy grad norm')
+policy_grad_norm_axes  = policy_grad_norm_fig.add_subplot(111)
 
-# value_grad_norm_fig = plt.figure('Value grad norm')
-# value_grad_norm_axes  = value_grad_norm_fig.add_subplot(111)
+value_grad_norm_fig = plt.figure('Value grad norm')
+value_grad_norm_axes  = value_grad_norm_fig.add_subplot(111)
 
 # explained_variance_fig = plt.figure('Explained variance')
 # explained_variance_axes  = explained_variance_fig.add_subplot(111)
@@ -104,12 +104,12 @@ if __name__ == '__main__':
 			nn_hidden = run[4]
 			epochs = run[5]
 			log_dir = f'logs_for_seeds-env_name={env_name}-lr_act={lr_act}-lr_crt={lr_crt}-nn_hidden={nn_hidden}-episodes_per_epoch={episodes_per_epoch}' 
-			log_file_name =  log_dir + '/' + f'-PG_with_stb-env={env_name}-po_lr={lr_act}-crt_lr={lr_crt}-episodes_per_epoch={episodes_per_epoch}-no.hidden: {nn_hidden}-no.iteration:{epochs}-seed:{seed}.csv'
+			log_file_name =  log_dir + '/' + f'-VPG-env={env_name}-po_lr={lr_act}-crt_lr={lr_crt}-episodes_per_epoch={episodes_per_epoch}-no.hidden: {nn_hidden}-no.iteration:{epochs}-seed:{seed}.csv'
 			logs = pd.read_csv(log_file_name)
 			if i == 0:
 				eps_length = logs['episode length']
-				q_estimate = logs['Q estimate']
-				training_return = logs['Training return']
+				adv = logs['Advantage']
+				training_return = logs['Epoch return']
 				mean_return = logs['mean return']
 				std_return = logs['std return']
 				max_return = logs['max return']
@@ -119,10 +119,13 @@ if __name__ == '__main__':
 				kl = logs['KL']
 				entropy = logs['entropy']
 				value_loss = logs['value loss']
+				value_grad_norm = logs['value grad norm']
+				policy_grad_norm = logs['policy grad norm']
+
 			else:
 				eps_length = np.vstack((eps_length,logs['episode length'].to_numpy()))
-				q_estimate = np.vstack((q_estimate,logs['Q estimate'].to_numpy()))
-				training_return = np.vstack((training_return,logs['Training return'].to_numpy()))
+				adv = np.vstack((adv,logs['Advantage'].to_numpy()))
+				training_return = np.vstack((training_return,logs['Epoch return'].to_numpy()))
 				mean_return = np.vstack((mean_return,logs['mean return'].to_numpy()))
 				std_return = np.vstack((std_return,logs['std return'].to_numpy()))
 				max_return = np.vstack((max_return,logs['max return'].to_numpy()))
@@ -132,11 +135,13 @@ if __name__ == '__main__':
 				kl = np.vstack((kl,logs['KL'].to_numpy()))
 				entropy = np.vstack((entropy,logs['entropy'].to_numpy()))
 				value_loss = np.vstack((value_loss,logs['value loss'].to_numpy()))
+				value_grad_norm = np.vstack((value_grad_norm,logs['value grad norm'].to_numpy()))
+				policy_grad_norm = np.vstack((policy_grad_norm,logs['policy grad norm'].to_numpy()))
 		
 
 		# ####################################       Plot the data        ####################################
 		plot(eps_len_axes, eps_length, 'Episode length', f'{lr_act},{lr_crt},{nn_hidden},{episodes_per_epoch}',j)
-		plot(q_estimate_axes, q_estimate, 'Q estimate', f'{lr_act},{lr_crt},{nn_hidden},{episodes_per_epoch}' ,j)
+		plot(adv_axes, adv, 'Advantage', f'{lr_act},{lr_crt},{nn_hidden},{episodes_per_epoch}' ,j)
 		plot(training_return_axes, training_return, 'Training return', f'{lr_act},{lr_crt},{nn_hidden},{episodes_per_epoch}', j)
 		plot(mean_return_axes, mean_return, 'Mean return', f'{lr_act},{lr_crt},{nn_hidden},{episodes_per_epoch}', j)
 		plot(std_return_axes, std_return, 'Std return', f'{lr_act},{lr_crt},{nn_hidden},{episodes_per_epoch}', j )
@@ -147,15 +152,15 @@ if __name__ == '__main__':
 		plot(kl_axes, kl, 'KL', f'{lr_act},{lr_crt},{nn_hidden},{episodes_per_epoch}', j)
 		plot(entropy_axes, entropy, 'Entropy', f'{lr_act},{lr_crt},{nn_hidden},{episodes_per_epoch}', j)
 		plot(value_loss_axes, value_loss, 'Value loss', f'{lr_act},{lr_crt},{nn_hidden},{episodes_per_epoch}', j)
-		# # plot(policy_grad_norm_axes, policy_grad_norm, 'Policy grad norm', f'{lr_act},{lr_crt},{nn_hidden}' )
-		# # plot(value_grad_norm_axes, value_grad_norm, 'value grad norm', f'{lr_act},{lr_crt},{nn_hidden}' )
+		plot(policy_grad_norm_axes, policy_grad_norm, 'Policy grad norm', f'{lr_act},{lr_crt},{nn_hidden}', j )
+		plot(value_grad_norm_axes, value_grad_norm, 'value grad norm', f'{lr_act},{lr_crt},{nn_hidden}', j )
 		# # plot(explained_variance_axes, explained_variance, 'Explained variance', f'{lr_act},{lr_crt},{nn_hidden}')
 		# ####################################       Plot the data        ####################################
 
 
 	##############################  Tight the plot  ###########################
 	eps_len_fig.tight_layout()
-	q_estimate_fig.tight_layout()
+	adv_fig.tight_layout()
 	training_return_fig.tight_layout()
 	mean_return_fig.tight_layout()
 	std_return_fig.tight_layout()
@@ -166,8 +171,8 @@ if __name__ == '__main__':
 	kl_fig.tight_layout()
 	entropy_fig.tight_layout()
 	value_loss_fig.tight_layout()
-	# policy_grad_norm_fig.tight_layout()
-	# value_grad_norm_fig.tight_layout()
+	policy_grad_norm_fig.tight_layout()
+	value_grad_norm_fig.tight_layout()
 	# explained_variance_fig.tight_layout()
 	##############################  Tight the plot  ###########################
 
@@ -178,20 +183,21 @@ if __name__ == '__main__':
 	save_dir = current_dir + '/' + save_path
 	if not os.path.exists(save_dir):
 		os.mkdir(save_dir)
-	eps_len_fig.savefig(f'{save_dir}/{env_name} Episode length', dpi=350)
-	q_estimate_fig.savefig(f'{save_dir}/{env_name} Q estimate', dpi=350)
-	training_return_fig.savefig(f'{save_dir}/{env_name} Training return', dpi=350)
-	mean_return_fig.savefig(f'{save_dir}/{env_name} Mean return', dpi=350)
-	std_return_fig.savefig(f'{save_dir}/{env_name} Std return', dpi=350)
-	max_return_fig.savefig(f'{save_dir}/{env_name} Max return', dpi=350)
-	min_return_fig.savefig(f'{save_dir}/{env_name} Min return', dpi=350)
-	mean_value_fig.savefig(f'{save_dir}/{env_name} Mean value', dpi=350)
-	policy_loss_fig.savefig(f'{save_dir}/{env_name} Policy loss', dpi=350)
-	kl_fig.savefig(f'{save_dir}/{env_name} KL', dpi=350)
-	entropy_fig.savefig(f'{save_dir}/{env_name} Entropy', dpi=350)
-	value_loss_fig.savefig(f'{save_dir}/{env_name} Value loss', dpi=350)
-	# # policy_grad_norm_fig.savefig('Policy grad norm', dpi=350)
-	# # value_grad_norm_fig.savefig('Value grad norm', dpi=350)
+	eps_len_fig.savefig(f'{save_dir}/{env_name} Episode length', dpi=150)
+	adv_fig.savefig(f'{save_dir}/{env_name} Advantage', dpi=150)
+	training_return_fig.savefig(f'{save_dir}/{env_name} Training return', dpi=150)
+	mean_return_fig.savefig(f'{save_dir}/{env_name} Mean return', dpi=150)
+	std_return_fig.savefig(f'{save_dir}/{env_name} Std return', dpi=150)
+	max_return_fig.savefig(f'{save_dir}/{env_name} Max return', dpi=150)
+	min_return_fig.savefig(f'{save_dir}/{env_name} Min return', dpi=150)
+	mean_value_fig.savefig(f'{save_dir}/{env_name} Mean value', dpi=150)
+	policy_loss_fig.savefig(f'{save_dir}/{env_name} Policy loss', dpi=150)
+	kl_fig.savefig(f'{save_dir}/{env_name} KL', dpi=150)
+	entropy_fig.savefig(f'{save_dir}/{env_name} Entropy', dpi=150)
+	value_loss_fig.savefig(f'{save_dir}/{env_name} Value loss', dpi=150)
+	policy_grad_norm_fig.savefig(f'{save_dir}/{env_name} Policy grad norm', dpi=350)
+	value_grad_norm_fig.savefig(f'{save_dir}/{env_name} Value grad norm', dpi=350)
 	# # explained_variance_fig.savefig('Explained variance', dpi=350)
+	print(f"All figures are in the folder {save_path}")
 	# ##############################  Save the figures  ########################################
 	plt.show()

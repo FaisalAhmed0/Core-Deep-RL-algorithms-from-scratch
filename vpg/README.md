@@ -1,4 +1,4 @@
-## This codebase contains an implementation of the Vanilla policy gradient algorithm with State dependent baseline V(s)
+## This codebase contains an implementation of the Vanilla policy gradient algorithm (REINFORCE) with General Advantage Esimation (GAE)
 for more details about this form of policy gradient: 
 https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html#baselines-in-policy-gradients
 
@@ -11,6 +11,9 @@ https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html#baselines-in-p
     eps: number of episodes per epoch
     nn_hidden: number of units in the two hidden layers architecture for both the policy and value nets
     seed: random number generation seed
+    lambd: value of the discount parameter in General advantage estimation (GAE).
+    gamma: value of the discount factor of the total return, also used in GAE.
+    tb: enable tensorboard for real time dignosis.
 
 ## Performance and diagnosis:
     KL divergence of the policy
@@ -20,8 +23,9 @@ https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html#baselines-in-p
     Mean Episode Return
     Std Episode Return
     Entropy
-    Q estimation
+    Advantage
     Value net output
+    Gradient norms
 
 ## Default parameters:
     learning rate (for both policy and value networks): 1e-3
@@ -29,4 +33,4 @@ https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html#baselines-in-p
     eps : 1
     epochs: 3000
 ## To see the performance curves run tensorboard on the cmd/terminal:
-    To plot the result run plot_results.py with the same cmd/terminal arguemnts of the training
+    To plot the result run plot_results.py with the same cmd/terminal arguemnts of the training excpet --s
