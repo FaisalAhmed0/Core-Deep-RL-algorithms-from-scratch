@@ -1,4 +1,4 @@
-## This codebase contains an implementation of the Vanilla policy gradient algorithm (REINFORCE) with General Advantage Esimation (GAE)
+## This codebase contains an implementation of the Vanilla policy gradient algorithm (REINFORCE) with General Advantage Esimation (General)
 for more details about this form of policy gradient: 
 https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html#baselines-in-policy-gradients
 
@@ -31,6 +31,6 @@ https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html#baselines-in-p
     learning rate (for both policy and value networks): 1e-3
     nn_hidden: [64,64]
     eps : 1
-    epochs: 3000
+    epochs: 1000
 ## To see the performance curves run tensorboard on the cmd/terminal:
     To plot the result run plot_results.py with the same cmd/terminal arguemnts of the training excpet --s
