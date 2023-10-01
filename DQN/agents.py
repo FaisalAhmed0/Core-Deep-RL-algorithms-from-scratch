@@ -6,23 +6,25 @@ from torch.utils import tensorboard
 import torch.optim as opt
 
 from buffers import SimpleDataBuffer
-from model import DQN
+from model import DQN_CNN
+from model import DQN_MLP
 from utils import soft_update_params
+import gym
 
 import numpy as np
 
 class DQN_Agent:
   def __init__(self, args):
-    self.in_channels = args["in_channels"]
-    self.image_width = args["image_width"]
+    # extract args into class attributes
+    self.env_name = args["env_name"]
     self.lr = args["lr"]
-    self.num_actions = args["num_actions"]
+    self.hidden_dims = args["hidden_dims"]
+    self.exp_dir = args["exper_dir"]
+    self.obs_type = args["obs_type"]
     self.replay_buffer_size = args["replay_buffer_size"]
     self.eps_min = args["eps_min"]
     self.batch_size = args["batch_size"]
     self.log = args["log"]
-    self.train_env = args["train_env"]
-    self.eval_env = args["eval_env"]
     self.device = args["device"]
     self.eps_decay_rate = args["eps_decay_rate"]
     self.gamma = args["gamma"]
@@ -31,23 +33,32 @@ class DQN_Agent:
     self.tau = args["tau"]
     self.log_name = args["log_name"]
     self.esp_decay_function = args["esp_decay_function"]
-    # if log create a tensor_board summary writer
-    if self.log:
-      log_folder = f"env_name={self.train_env.env.spec.id}_{self.log_name}"
-      os.makedirs(log_folder, exist_ok=True)
-      self.sw = tensorboard.SummaryWriter(log_dir=f"./{log_folder}")
+    # create the training and the evaluation environments
+    self.train_env = gym.make(self.env_name)
+    self.eval_env = gym.make(self.env_name)
+    # extract the shape of actions and the shape of the observations depending on the obs_type
+    self.num_actions = self.train_env.action_space.n
+    if self.obs_type == "image":
+      self.image_width = self.train_env.observation_space.sample().shape[-1]
+    else:
+      self.image_width = 0
+    dummy_obs = self.train_env.observation_space.sample()
+    self.in_channels = dummy_obs.shape[0]
     # create the DQN model
-    self.dqn_model = DQN(self.in_channels, self.num_actions, self.image_width, "cpu").to(self.device)
-    if self.target_network:
-      self.target_dqn_model = DQN(self.in_channels, self.num_actions, self.image_width, "cpu").to(self.device)
-      self.target_dqn_model.load_state_dict(self.dqn_model.state_dict())
+    if self.obs_type == "image":
+      self.dqn_model = DQN_CNN(self.in_channels, self.num_actions, self.image_width, input_type=self.obs_type).to(self.device)
+      if self.target_network:
+        self.target_dqn_model = DQN_CNN(self.in_channels, self.num_actions, self.image_width, input_type=self.obs_type).to(self.device)
+    else:
+      self.dqn_model = DQN_MLP(self.in_channels, self.hidden_dims, self.num_actions).to(self.device)
+      if self.target_network:
+        self.target_dqn_model = DQN_MLP(self.in_channels, self.hidden_dims, self.num_actions).to(self.device)
+    self.target_dqn_model.load_state_dict(self.dqn_model.state_dict())
     # configure optimizer
     self.optimizer = opt.Adam(self.dqn_model.parameters(), lr=self.lr)
     self.global_step = 0
     # create the repaly buffer
-    # self.buffer = DataBuffer(replay_buffer_size, (train_env.n, image_width, image_width), num_actions, device)
-    self.buffer = SimpleDataBuffer(self.replay_buffer_size, (self.in_channels, ),self.num_actions, self.device)
-    self.working_directory = args["working_directory"]
+    self.buffer = SimpleDataBuffer(self.replay_buffer_size, (self.in_channels, ), self.device)
 
   def update_eps(self):
     # Linear
@@ -55,6 +66,7 @@ class DQN_Agent:
       eps = max(1.0 - (self.eps_decay_rate) * self.global_step   , self.eps_min)
     else:
       # exponential
+      # TODO: replace with this (1-eps_min) * np.exp(np.log(eps_min) * global_step * eps_decay_rate)
       eps = self.eps_min + (1-self.eps_min) * np.exp(-1 * self.global_step * self.eps_decay_rate)
     return eps
 

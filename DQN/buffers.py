@@ -1,6 +1,6 @@
 import numpy as np
 import torch
-
+# TODO: explote different buffer types in pytorch and see how the replay buffer efficiency affect the training speed
 class SimpleDataBuffer:
   '''
   DataBuffer(size)
@@ -8,7 +8,7 @@ class SimpleDataBuffer:
   size: the max length of the buffer
   obs_shape: size of the observation vector
   '''
-  def __init__(self, size, obs_shape, action_dim, device):
+  def __init__(self, size, obs_shape, device):
     self.size = size
     # Create the buffer as a Dequeue for efficient appending and poping
     self.observations = np.zeros((size, *obs_shape))
