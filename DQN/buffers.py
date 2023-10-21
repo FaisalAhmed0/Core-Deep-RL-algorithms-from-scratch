@@ -1,6 +1,6 @@
 import numpy as np
 import torch
-# TODO: explote different buffer types in pytorch and see how the replay buffer efficiency affect the training speed
+# TODO: explore different buffer types in pytorch and see how the replay buffer efficiency affect the training speed
 class SimpleDataBuffer:
   '''
   DataBuffer(size)

@@ -3,22 +3,17 @@ import torch.nn as nn
 
 import random 
 import numpy as np
-# TODO: add seed everything
-
 
 
 def soft_update_params(net, target_net, tau):
     for param, target_param in zip(net.parameters(), target_net.parameters()):
         target_param.data.copy_(tau * param.data +
                                 (1 - tau) * target_param.data)
-        
-
 
 def seed_everything(seed):
     torch.random.manual_seed(seed)
     random.seed(seed)
     np.random.seed(seed)
-
 
 
 def create_mlp(inpt_dim, hidden_dims, output_dim, include_output_layer=True):

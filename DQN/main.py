@@ -61,6 +61,8 @@ def setup_experiment(args):
     args_dic["exper_dir"] = exp_dir
     # create the DQN agent
     agent = agents.DQN_Agent(args)
+    # train the agent 
+    agent.train()
 
 
 

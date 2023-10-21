@@ -66,9 +66,10 @@ class DQN_Agent:
       eps = max(1.0 - (self.eps_decay_rate) * self.global_step   , self.eps_min)
     else:
       # exponential
-      # TODO: replace with this (1-eps_min) * np.exp(np.log(eps_min) * global_step * eps_decay_rate)
-      eps = self.eps_min + (1-self.eps_min) * np.exp(-1 * self.global_step * self.eps_decay_rate)
+      eps = (1-self.eps_min) * np.exp(np.log(self.eps_min) * self.global_step * self.eps_decay_rate)
     return eps
+
+  # TODO: add the act method
 
 
   def train(self, episodes=10000):
