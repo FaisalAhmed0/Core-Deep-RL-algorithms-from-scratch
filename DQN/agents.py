@@ -144,8 +144,9 @@ class DQN_Agent:
   def record_episode(self):
     frames = []
     obs = self.eval_env.reset()
+    frame = self.eval_env.render("rgb_array")
     done = False
-    frames.append(obs)
+    frames.append(frame)
     total_reward = 0
     while not done:
       obs = torch.tensor(obs, dtype=torch.float32, device=self.device)[None, :]
@@ -153,7 +154,8 @@ class DQN_Agent:
       action = np.random.randint(self.num_actions)
       obs, reward, done, info = self.eval_env.step(action)
       total_reward += reward
-      frames.append(obs)
+      frame = self.eval_env.render("rgb_array")
+      frames.append(frame)
     # create a video
     frames = np.transpose(np.array(frames),(0,3,1,2))
     fps, skip = 6, 8
