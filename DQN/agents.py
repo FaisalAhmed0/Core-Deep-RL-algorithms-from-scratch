@@ -126,7 +126,7 @@ class DQN_Agent:
             "epsilon": epsilon,
             "Training_reward": total_reward
           }
-          self.logger.log(logs)
+          self.logger.log(logs, self.global_step)
         if self.global_step%1000 == 0:
           print(f"Iteration:{self.global_step}, MSE:{average_loss}, training_reward:{total_reward}")
 
