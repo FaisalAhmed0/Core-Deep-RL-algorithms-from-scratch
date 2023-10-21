@@ -71,8 +71,8 @@ class DQN_Agent:
 
 
   def train(self, episodes=10000):
-    for eps in range(episodes):
-      obs, _ = self.train_env.reset()
+    for e in range(episodes):
+      obs = self.train_env.reset()
       done = False
       total_reward = 0
       average_loss = 0
@@ -84,7 +84,7 @@ class DQN_Agent:
         else:
           with torch.no_grad():
             action = self.dqn_model( torch.tensor(obs, device=self.device, dtype=torch.float32)[None, :] ).argmax().item()
-        next_obs, reward, done, truncated, info = self.train_env.step(action)
+        next_obs, reward, done, info = self.train_env.step(action)
         self.buffer.add(obs, action, reward, next_obs, done)
         # sample minibatch for updaing the model
         observations, actions, rewards, next_observations, dones = self.buffer.sample(self.batch_size)
