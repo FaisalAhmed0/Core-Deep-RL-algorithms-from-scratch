@@ -24,14 +24,12 @@ class DQN_Agent:
     self.replay_buffer_size = args["replay_buffer_size"]
     self.eps_min = args["eps_min"]
     self.batch_size = args["batch_size"]
-    self.log = args["log"]
     self.device = args["device"]
     self.eps_decay_rate = args["eps_decay_rate"]
     self.gamma = args["gamma"]
     self.huber_loss = args["huber_loss"]
     self.target_network = args["target_network"]
     self.tau = args["tau"]
-    self.log_name = args["log_name"]
     self.esp_decay_function = args["esp_decay_function"]
     # create the training and the evaluation environments
     self.train_env = gym.make(self.env_name)

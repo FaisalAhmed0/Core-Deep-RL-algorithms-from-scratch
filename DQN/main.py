@@ -1,9 +1,9 @@
 import argparse
 import utils
 import os
-import gym
 import ast
 import agents
+import torch
 
 
 def cmd_args():
@@ -59,12 +59,12 @@ def setup_experiment(args):
     args_dic = vars(args)
     args_dic["hidden_dims"] = hidden_dims
     args_dic["exper_dir"] = exp_dir
+    args_dic["device"] = "cuda" if torch.cuda.is_available() else "cpu"
+
     # create the DQN agent
     agent = agents.DQN_Agent(args_dic)
     # train the agent 
     agent.train()
-
-
 
 
 if __name__ == "__main__":
