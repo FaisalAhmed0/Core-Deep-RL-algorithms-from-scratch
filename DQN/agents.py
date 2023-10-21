@@ -163,8 +163,8 @@ class DQN_Agent:
     total_reward = 0
     while not done:
       obs = torch.tensor(obs, dtype=torch.float32, device=self.device)[None, :]
-      # action = self.dqn_model(obs).argmax().item()
-      action = np.random.randint(self.num_actions)
+      action = self.dqn_model(obs).argmax().item()
+      # action = np.random.randint(self.num_actions)
       obs, reward, done, info = self.eval_env.step(action)
       total_reward += reward
       frame = self.eval_env.render("rgb_array")
