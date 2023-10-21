@@ -32,7 +32,7 @@ def cmd_args():
     # epslilon decay rate
     parser.add_argument('--eps_decay_rate', type=float, default=0.00001)
     # environment name
-    parser.add_argument('--env_name', type=str, default="cartPole-v0")
+    parser.add_argument('--env_name', type=str, default="CartPole-v0")
     # discount factor
     parser.add_argument('--gamma', type=float, default=0.99)
     # use huber loss
