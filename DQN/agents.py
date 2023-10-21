@@ -58,6 +58,8 @@ class DQN_Agent:
     # create the repaly buffer
     self.buffer = SimpleDataBuffer(self.replay_buffer_size, (self.in_channels, ), self.device)
 
+    self.sw = tensorboard.SummaryWriter(log_dir=f"./{self.exp_dir}")
+
   def update_eps(self):
     # Linear
     if self.esp_decay_function == "linear":
