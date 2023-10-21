@@ -51,7 +51,7 @@ class DQN_Agent:
       self.dqn_model = DQN_MLP(self.in_channels, self.hidden_dims, self.num_actions).to(self.device)
       if self.target_network:
         self.target_dqn_model = DQN_MLP(self.in_channels, self.hidden_dims, self.num_actions).to(self.device)
-    self.target_dqn_model.load_state_dict(self.dqn_model.state_dict())
+        self.target_dqn_model.load_state_dict(self.dqn_model.state_dict())
     # configure optimizer
     self.optimizer = opt.Adam(self.dqn_model.parameters(), lr=self.lr)
     self.global_step = 0
