@@ -107,8 +107,9 @@ class DQN_Agent:
                 # print(f"dones.shape:{dones.shape}")
                 # print(f"next_observations.shape:{next_observations.shape}")
                 # print(f"self.target_dqn_model(next_observations):{self.target_dqn_model(next_observations).shape}")
-                next_values =self.target_dqn_model(next_observations).gather(1, argmax_action.to(torch.int64).unsqueeze(dim=-1))
-                print(f"next_values.shape:{next_values.shape}")
+                next_values = self.target_dqn_model(next_observations).gather(1, argmax_action.to(torch.int64).unsqueeze(dim=-1))
+                next_values = next_values.reshape(-1)
+                # print(f"next_values.shape:{next_values.shape}")
                 targets = rewards + self.gamma*(next_values * dones)
               else:
                 targets = rewards + self.gamma*((self.target_dqn_model(next_observations).max(dim=1)[0]).detach() * dones)
