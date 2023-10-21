@@ -19,6 +19,9 @@ def cmd_args():
     # use target network
     parser.add_argument("--target_network",
                         action=argparse.BooleanOptionalAction)
+    # double dqn
+    parser.add_argument("--double",
+                        action=argparse.BooleanOptionalAction)
     # tau, for target network update
     parser.add_argument("--tau", type=float, default=0.01)
     # size of the replay buffer

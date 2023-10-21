@@ -35,6 +35,7 @@ class DQN_Agent:
     self.target_network = args["target_network"]
     self.tau = args["tau"]
     self.esp_decay_function = args["esp_decay_function"]
+    self.double = args["double"]
     # create the training and the evaluation environments
     self.train_env = gym.make(self.env_name)
     self.eval_env = gym.make(self.env_name)
@@ -99,7 +100,11 @@ class DQN_Agent:
         if len(self.buffer) >= self.batch_size:
           with torch.no_grad():
             if self.target_network:
-              targets = rewards + self.gamma*((self.target_dqn_model(next_observations).max(dim=1)[0]).detach() * dones)
+              if self.double:
+                argmax_action = self.dqn_model(next_observations).argmax(dim=1)
+                targets = rewards + self.gamma*((self.target_dqn_model(next_observations)[argmax_action]).detach() * dones)
+              else:
+                targets = rewards + self.gamma*((self.target_dqn_model(next_observations).max(dim=1)[0]).detach() * dones)
             else:
               targets = rewards + self.gamma*((self.dqn_model(next_observations).max(dim=1)[0]).detach() * dones)
             targets = targets.reshape(-1)
