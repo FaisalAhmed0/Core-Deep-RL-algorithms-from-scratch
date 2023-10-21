@@ -4,6 +4,7 @@ import torch
 import torch.nn.functional as F
 from torch.utils import tensorboard
 import torch.optim as opt
+import wandb
 
 from buffers import SimpleDataBuffer
 from model import DQN_CNN
@@ -11,13 +12,14 @@ from model import DQN_MLP
 from utils import soft_update_params
 from utils import Logger
 import gym
-import wandb
+import imageio
 
 import numpy as np
 
 class DQN_Agent:
   def __init__(self, args):
     # extract args into class attributes
+    self.args = args
     self.env_name = args["env_name"]
     self.lr = args["lr"]
     self.hidden_dims = args["hidden_dims"]
@@ -129,26 +131,34 @@ class DQN_Agent:
           self.logger.log(logs, self.global_step)
         if self.global_step%1000 == 0:
           print(f"Iteration:{self.global_step}, MSE:{average_loss}, training_reward:{total_reward}")
+        if self.global_step%10000 == 0:
+          eval_reward = self.record_episode()
+          self.logger.log({"eval_reward":eval_reward}, self.global_step)
 
       if self.target_network:
         soft_update_params(self.dqn_model, self.target_dqn_model, self.tau)
 
 
 
-  # @torch.no_grad()
-  # def record_episode(self):
-  #   frames = []
-  #   obs, _ = self.eval_env.reset()
-  #   done = False
-  #   print(obs.shape)
-  #   frames.append(obs)
-  #   while not done:
-  #     obs = torch.tensor(obs, dtype=torch.float32, device=self.device)[None, :]
-  #     # action = self.dqn_model(obs).argmax().item()
-  #     action = np.random.randint(self.num_actions)
-  #     obs, reward, done, truncated, info = self.eval_env.step(action)
-  #     frames.append(obs)
-  #   # create a video
-  #   path = f"{self.working_directory}/video.mp4"
-  #   imageio.mimsave(path, np.transpose(np.array(frames),(0,2,3,1)), fps=4)
-  #   return
+  @torch.no_grad()
+  def record_episode(self):
+    frames = []
+    obs = self.eval_env.reset()
+    done = False
+    frames.append(obs)
+    total_reward = 0
+    while not done:
+      obs = torch.tensor(obs, dtype=torch.float32, device=self.device)[None, :]
+      # action = self.dqn_model(obs).argmax().item()
+      action = np.random.randint(self.num_actions)
+      obs, reward, done, info = self.eval_env.step(action)
+      total_reward += reward
+      frames.append(obs)
+    # create a video
+    frames = np.transpose(np.array(frames),(0,3,1,2))
+    fps, skip = 6, 8
+    if self.args["logger"] == "wandb":
+      wandb.log({'video': wandb.Video(frames[::skip,:,::2,::2], fps=fps,format="gif")})
+    # path = f"{self.exp_dir}/video.mp4"
+    # imageio.mimsave(path, np.transpose(np.array(frames),(0,2,3,1)), fps=4)
+    return total_reward

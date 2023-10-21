@@ -38,6 +38,7 @@ class Logger:
             self.logger = wandb.init(
             # Set the project where this run will be logged
             project=project_name,
+            name=log_folder,
             # Track hyperparameters and run metadata
             config=args_dict)
         else:
