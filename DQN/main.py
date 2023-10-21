@@ -13,7 +13,7 @@ def cmd_args():
     parser.add_argument('--checkpoint', type=str, default="none")
     # model layers
     parser.add_argument("--hidden_dims", type=str,
-                        default="[256, 256]")
+                        default="[512, 512]")
     # learning rate
     parser.add_argument("--lr", type=float, default=3e-4)
     # use target network
@@ -27,7 +27,7 @@ def cmd_args():
     # size of the replay buffer
     parser.add_argument("--replay_buffer_size", type=int, default=int(1e6))
     # training batch size
-    parser.add_argument("--batch_size", type=int, default=256)
+    parser.add_argument("--batch_size", type=int, default=512)
     # minimum epsilon for exploration 
     parser.add_argument("--eps_min", type=float, default=0.01)
     # epslilon decay function
