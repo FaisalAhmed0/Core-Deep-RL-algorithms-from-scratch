@@ -101,7 +101,8 @@ class DQN_Agent:
           with torch.no_grad():
             if self.target_network:
               if self.double:
-                argmax_action = self.dqn_model(next_observations).argmax(dim=1)
+                argmax_action = self.dqn_model(next_observations).argmax(dim=1).reshape(-1)
+                print(f"argmax_action.shape:{argmax_action.shape}")
                 targets = rewards + self.gamma*((self.target_dqn_model(next_observations)[argmax_action]).detach() * dones)
               else:
                 targets = rewards + self.gamma*((self.target_dqn_model(next_observations).max(dim=1)[0]).detach() * dones)
