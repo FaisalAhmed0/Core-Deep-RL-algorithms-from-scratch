@@ -43,6 +43,8 @@ def cmd_args():
     parser.add_argument('--seed', type=int, default=0)
     # number of training steps
     parser.add_argument("--training_step", type=int, default=int(1e5))
+    # logger
+    parser.add_argument('--logger', type=str, default="wandb")
 
 
     args = parser.parse_args()

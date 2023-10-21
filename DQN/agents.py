@@ -9,7 +9,9 @@ from buffers import SimpleDataBuffer
 from model import DQN_CNN
 from model import DQN_MLP
 from utils import soft_update_params
+from utils import Logger
 import gym
+import wandb
 
 import numpy as np
 
@@ -57,8 +59,9 @@ class DQN_Agent:
     self.global_step = 0
     # create the repaly buffer
     self.buffer = SimpleDataBuffer(self.replay_buffer_size, (self.in_channels, ), self.device)
-
-    self.sw = tensorboard.SummaryWriter(log_dir=f"./{self.exp_dir}")
+    # create the logger
+    project_name = self.exp_dir + f"_target_network_{self.target_network}"
+    self.logger = Logger(project_name, args, self.exp_dir, args["logger"])
 
   def update_eps(self):
     # Linear
@@ -118,17 +121,18 @@ class DQN_Agent:
 
         eps_length += 1
         if self.global_step%5000 == 0:
-          self.sw.add_scalar("mse_loss", loss, self.global_step)
-          self.sw.add_scalar("epsilon", epsilon, self.global_step)
+          logs = {
+            "mse_loss": loss,
+            "epsilon": epsilon,
+            "Training_reward": total_reward
+          }
+          self.logger.log(logs)
+        if self.global_step%1000 == 0:
+          print(f"Iteration:{self.global_step}, MSE:{average_loss}, training_reward:{total_reward}")
 
-      self.sw.add_scalar("Training reward", total_reward, self.global_step)
       if self.target_network:
         soft_update_params(self.dqn_model, self.target_dqn_model, self.tau)
-
-      # print(f"total_reward:{total_reward}")
-      print(f"Iteration:{self.global_step}, MSE:{average_loss}, training_reward:{total_reward}")
-      #   break
-      # break
+        
 
 
   # @torch.no_grad()
