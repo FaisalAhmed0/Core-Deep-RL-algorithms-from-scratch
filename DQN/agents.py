@@ -77,8 +77,8 @@ class DQN_Agent:
   # TODO: add the act method
 
 
-  def train(self, episodes=10000):
-    for e in range(episodes):
+  def train(self, training_steps=10000):
+    while self.global_step < training_steps:
       obs = self.train_env.reset()
       done = False
       total_reward = 0

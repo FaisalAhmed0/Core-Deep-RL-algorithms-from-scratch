@@ -68,7 +68,7 @@ def setup_experiment(args):
     # create the DQN agent
     agent = agents.DQN_Agent(args_dic)
     # train the agent 
-    agent.train()
+    agent.train(args.training_step)
 
 
 if __name__ == "__main__":
