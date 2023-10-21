@@ -45,6 +45,8 @@ def cmd_args():
     parser.add_argument("--training_step", type=int, default=int(1e5))
     # logger
     parser.add_argument('--logger', type=str, default="wandb")
+    # project_name
+    parser.add_argument('--project_name', type=str, default="dqn")
 
 
     args = parser.parse_args()

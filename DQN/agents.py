@@ -60,7 +60,7 @@ class DQN_Agent:
     # create the repaly buffer
     self.buffer = SimpleDataBuffer(self.replay_buffer_size, (self.in_channels, ), self.device)
     # create the logger
-    project_name = self.exp_dir + f"_target_network_{self.target_network}"
+    project_name = args["project_name"]
     self.logger = Logger(project_name, args, self.exp_dir, args["logger"])
 
   def update_eps(self):
@@ -132,7 +132,7 @@ class DQN_Agent:
 
       if self.target_network:
         soft_update_params(self.dqn_model, self.target_dqn_model, self.tau)
-        
+
 
 
   # @torch.no_grad()
