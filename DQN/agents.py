@@ -128,13 +128,13 @@ class DQN_Agent:
             "epsilon": epsilon,
             "Training_reward": total_reward
           }
+          if self.global_step%10000 == 0:
+            eval_reward = self.record_episode()
+          logs["eval_reward"] = eval_reward
           self.logger.log(logs, self.global_step)
         if self.global_step%1000 == 0:
           print(f"Iteration:{self.global_step}, MSE:{average_loss}, training_reward:{total_reward}")
-        if self.global_step%10000 == 0:
-          eval_reward = self.record_episode()
-          self.logger.log({"eval_reward":eval_reward}, self.global_step)
-
+        
       if self.target_network:
         soft_update_params(self.dqn_model, self.target_dqn_model, self.tau)
 
