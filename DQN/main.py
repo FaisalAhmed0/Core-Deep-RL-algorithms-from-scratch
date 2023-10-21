@@ -60,7 +60,7 @@ def setup_experiment(args):
     args_dic["hidden_dims"] = hidden_dims
     args_dic["exper_dir"] = exp_dir
     # create the DQN agent
-    agent = agents.DQN_Agent(args)
+    agent = agents.DQN_Agent(args_dic)
     # train the agent 
     agent.train()
 
