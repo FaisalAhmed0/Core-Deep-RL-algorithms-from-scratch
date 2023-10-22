@@ -3,7 +3,6 @@ import torch
 # TODO: explore different buffer types in pytorch and see how the replay buffer efficiency affect the training speed
 class SimpleDataBuffer:
   '''
-  DataBuffer(size)
   A simple data Buffer to sotre transition during the training,
   size: the max length of the buffer
   obs_shape: size of the observation vector
