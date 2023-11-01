@@ -117,9 +117,11 @@ class DQN_Agent:
             loss = F.huber_loss(q_values, targets)
           else:
             loss = F.mse_loss(q_values, targets)
+          # update the learned model
           self.optimizer.zero_grad()
           loss.backward()
           self.optimizer.step()
+          # update the target model
           if self.target_network:
             soft_update_params(self.dqn_model, self.target_dqn_model, self.tau)
           average_loss += (loss.item())
